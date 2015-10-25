@@ -81,6 +81,15 @@ defmodule Job do
         state = Dict.put(state, :env, [{"BUILD_VERSION", state[:version]} | env])
         {:noreply, state}
       :deps ->
+        state = next_state(state, :assets) do
+          File.mkdir(Path.join([dir, "priv"]))
+          File.mkdir(Path.join([dir, "priv", "static"]))
+          System.cmd "npm", ["install"], cd: dir, env: env, into: output, stderr_to_stdout: true
+          System.cmd "node", ["node_modules/brunch/bin/brunch", "build", "--production"], cd: dir, env: env, into: output, stderr_to_stdout: true
+          System.cmd "mix", ["phoenix.digest"], cd: dir, env: env, into: output, stderr_to_stdout: true
+        end
+        {:noreply, state}
+      :assets ->
         state = next_state(state, :compile) do
           System.cmd "mix", ["compile"], cd: dir, env: env, into: output, stderr_to_stdout: true
         end
