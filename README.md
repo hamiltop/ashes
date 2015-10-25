@@ -1,5 +1,7 @@
 # Ashes
 
+A Github Webhook server for building `exrm` releases and upgrading the locally running server
+
 To start your Phoenix app:
 
   1. Install dependencies with `mix deps.get`
