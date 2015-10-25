@@ -7,8 +7,8 @@ defmodule GithubWebhookPlug do
 
   def call(conn, options) do
     mount = Dict.get(options, :mount)
-    case hd(conn.path_info) do
-      ^mount -> github_api(conn, options)
+    case conn.path_info do
+      [^mount] -> github_api(conn, options)
       _ -> conn
     end
     # if not mount matches => return
