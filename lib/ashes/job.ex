@@ -25,22 +25,23 @@ defmodule Job do
       |> Enum.find(&String.starts_with?(&1, "PATH="))
       |> String.split("=")
       |> List.to_tuple
+    env = [{"MIX_ENV", "prod"}, path_env]
     state = %{
       dir: dir,
       data: data,
       output: output,
-      env: [{"MIX_ENV", "prod"}, path_env],
+      env: env,
       name: name}
     state = case File.dir?(dir) do
       true ->
         next_state(state, :clone) do
-          System.cmd "git", ["fetch"], cd: dir, into: output, stderr_to_stdout: true
-          System.cmd "mix", ["clean", repo, dir], cd: dir, into: output, stderr_to_stdout: true
+          System.cmd "git", ["fetch"], env: env, cd: dir, into: output, stderr_to_stdout: true
+          System.cmd "mix", ["clean", repo, dir], env: env, cd: dir, into: output, stderr_to_stdout: true
         end
       false ->
         File.mkdir(dir)
         next_state(state, :clone) do
-          System.cmd "git", ["clone", repo, dir], cd: dir, into: output, stderr_to_stdout: true
+          System.cmd "git", ["clone", repo, dir], env: env, cd: dir, into: output, stderr_to_stdout: true
         end
     end
     {:ok, state}
