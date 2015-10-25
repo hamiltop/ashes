@@ -22,6 +22,7 @@ defmodule Ashes.Endpoint do
   plug Plug.RequestId
   plug Plug.Logger
 
+  plug GithubWebhookPlug, mount: "api", secret: System.get_env("GITHUB_SECRET")
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],

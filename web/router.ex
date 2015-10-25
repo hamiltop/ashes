@@ -9,9 +9,9 @@ defmodule Ashes.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
+  # pipeline :api do
+  #  plug :accepts, ["json"]
+  # end
 
   scope "/", Ashes do
     pipe_through :browser # Use the default browser stack
@@ -20,8 +20,8 @@ defmodule Ashes.Router do
   end
 
   # Other scopes may use custom stacks.
-  scope "/api", Ashes do
-    pipe_through :api
-    post "/", PageController, :github_api
-  end
+  # scope "/api", Ashes do
+  #  pipe_through :api
+  # post "/", PageController, :github_api
+  # end
 end
