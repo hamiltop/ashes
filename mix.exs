@@ -3,7 +3,7 @@ defmodule Ashes.Mixfile do
 
   def project do
     [app: :ashes,
-     version: "0.0.1",
+     version: System.get_env("BUILD_VERSION") || "0.0.1",
      elixir: "~> 1.0",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix] ++ Mix.compilers,
@@ -31,6 +31,7 @@ defmodule Ashes.Mixfile do
     [{:phoenix, "~> 1.0.3"},
      {:phoenix_html, "~> 2.1"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:exrm, "~> 0.19.9"}]
   end
 end
