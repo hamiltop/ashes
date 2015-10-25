@@ -17,7 +17,7 @@ defmodule Job do
     raise "problem"
   end
   def init({name, data}) do
-    dir = System.tmp_dir <> name
+    dir = Path.join(["/var", "local", "ashes", "build", name])
     repo = data["repository"]["url"]
     output = OutputCollector.new(self)
     state = %{dir: dir, data: data, output: output, env: [{"MIX_ENV", "prod"}], name: name}
@@ -81,7 +81,7 @@ defmodule Job do
         {:noreply, state}
       :release ->
         state = next_state(state, :upgrade) do
-          run_dir = Path.join(["/tmp", name])
+          run_dir = Path.join(["/var", "local", "ashes", "run", name])
           target_dir = Path.join([run_dir, "releases", state[:version]])
           File.mkdir(target_dir)
           filename = name <> ".tar.gz"
