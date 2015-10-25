@@ -20,7 +20,8 @@ defmodule Ashes.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Ashes do
-  #   pipe_through :api
-  # end
+  scope "/api", Ashes do
+    pipe_through :api
+    post "/", PageController, :github_api
+  end
 end

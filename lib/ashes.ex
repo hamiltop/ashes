@@ -9,6 +9,8 @@ defmodule Ashes do
     children = [
       # Start the endpoint when the application starts
       supervisor(Ashes.Endpoint, []),
+      supervisor(JobSupervisor, []),
+      worker(JobManager, [])
       # Here you could define other workers and supervisors as children
       # worker(Ashes.Worker, [arg1, arg2, arg3]),
     ]
