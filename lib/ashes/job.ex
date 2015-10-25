@@ -20,7 +20,17 @@ defmodule Job do
     dir = Path.join(["/var", "local", "ashes", "build", name])
     repo = data["repository"]["url"]
     output = OutputCollector.new(self)
-    state = %{dir: dir, data: data, output: output, env: [{"MIX_ENV", "prod"}], name: name}
+    {bash_env, 0} = System.cmd("/bin/bash", ["-l", "-c", "env"])
+    path_env = String.split(bash_env)
+      |> Enum.find(&String.starts_with?(&1, "PATH="))
+      |> String.split("=")
+      |> List.to_tuple
+    state = %{
+      dir: dir,
+      data: data,
+      output: output,
+      env: [{"MIX_ENV", "prod"}, path_env],
+      name: name}
     state = case File.dir?(dir) do
       true ->
         next_state(state, :clone) do
